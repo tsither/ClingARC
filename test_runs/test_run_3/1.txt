@@ -1,0 +1,88 @@
+STEP 1: Extracted Primitives
+
+instances/1
+Results for grid_3.lp:
+Input grid:
+ diagonal_line(input,start(0,1),end(1,2),color(gray),length(2)) diagonal_line(input,start(2,1),end(1,2),color(gray),length(2)) grid_size(input,3,3)
+
+Output grid:
+ grid_size(output,3,3) horizontal_line(output,start(0,0),end(0,2),color(yellow),length(3)) horizontal_line(output,start(1,0),end(1,2),color(green),length(3)) horizontal_line(output,start(2,0),end(2,2),color(yellow),length(3))
+
+========================================
+
+Results for grid_2.lp:
+Input grid:
+ diagonal_line(input,start(0,0),end(1,1),color(gray),length(2)) diagonal_line(input,start(2,0),end(1,1),color(gray),length(2)) grid_size(input,3,3)
+
+Output grid:
+ grid_size(output,3,3) horizontal_line(output,start(0,0),end(0,2),color(red),length(3)) horizontal_line(output,start(1,0),end(1,2),color(yellow),length(3)) horizontal_line(output,start(2,0),end(2,2),color(red),length(3))
+
+========================================
+
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,3,3) vertical_line(input,start(0,2),end(2,2),color(gray),length(3))
+
+Output grid:
+ grid_size(output,3,3) square(output,top_left_corner(0,0),bottom_right_corner(2,2),size(3),color(green))
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ diagonal_line(input,start(2,0),end(0,2),color(gray),length(3)) grid_size(input,3,3)
+
+Output grid:
+ grid_size(output,3,3) horizontal_line(output,start(0,0),end(0,2),color(green),length(3)) horizontal_line(output,start(1,0),end(1,2),color(yellow),length(3)) horizontal_line(output,start(2,0),end(2,2),color(red),length(3))
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Observations / rule (consistent across all examples)
+
+- Grid size is preserved (3x3).
+- For each row r in the input, find the column c of the (gray) filled cell in that row.
+- Map that column index to a color:
+  - column 0 -> red
+  - column 1 -> yellow
+  - column 2 -> green
+- Paint the entire row r with that color. Concretely: produce a horizontal_line(output, start(r,0), end(r,2), color(mapped_color), length(3)) for each row.
+- (Equivalently: if all three rows map to the same color the output can be represented as a filled square of that color covering the whole grid.)
+
+Applied to the given examples this yields the shown horizontal rows (or full square when all rows are green).
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ diagonal_line(input,start(1,0),end(2,1),color(gray),length(2)) grid_size(input,3,3) isolated_point(input,(0,2),gray)
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+Output primitives:
+- grid_size(output,3,3).
+- horizontal_line(output,start(0,0),end(0,2),color(green)).  % row 0: input gray at (0,2) -> column 2 -> green
+- horizontal_line(output,start(1,0),end(1,2),color(red)).    % row 1: input gray at (1,0) -> column 0 -> red
+- horizontal_line(output,start(2,0),end(2,2),color(yellow)). % row 2: input gray at (2,1) -> column 1 -> yellow
+
+Natural language description:
+Each input row is filled entirely with the color mapped from the column index of the gray cell in that row: row 0 (gray at column 2) -> whole row green; row 1 (gray at column 0) -> whole row red; row 2 (gray at column 1) -> whole row yellow.
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,3,3).
+horizontal_line(output,start(0,0),end(0,2),color(green),length(3)).
+horizontal_line(output,start(1,0),end(1,2),color(red),length(3)).
+horizontal_line(output,start(2,0),end(2,2),color(yellow),length(3)).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,3,3).
+horizontal_line(output,start(0,0),end(0,2),color(green),length(3)).
+horizontal_line(output,start(1,0),end(1,2),color(red),length(3)).
+horizontal_line(output,start(2,0),end(2,2),color(yellow),length(3)).
+STEP 7: Evaluation of Predicted Output Grid
+
+correct_grid

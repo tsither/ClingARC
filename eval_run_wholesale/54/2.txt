@@ -1,0 +1,94 @@
+STEP 1: Extracted Primitives
+
+instances/54
+Results for grid_2.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(1,1),cyan) isolated_point(input,(1,5),cyan) isolated_point(input,(4,1),cyan) isolated_point(input,(7,5),cyan) isolated_point(input,(7,9),cyan) isolated_point(input,(9,2),cyan)
+
+Output grid:
+ diagonal_line(output,start(1,4),end(2,5),color(cyan),length(2)) diagonal_line(output,start(2,1),end(1,2),color(cyan),length(2)) diagonal_line(output,start(6,5),end(7,6),color(cyan),length(2)) grid_size(output,10,10) horizontal_line(output,start(1,1),end(1,5),color(cyan),length(5)) horizontal_line(output,start(7,5),end(7,9),color(cyan),length(5)) isolated_point(output,(9,2),cyan) vertical_line(output,start(1,1),end(4,1),color(cyan),length(4)) vertical_line(output,start(1,5),end(7,5),color(cyan),length(7))
+
+========================================
+
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(1,7),cyan) isolated_point(input,(3,2),cyan) isolated_point(input,(6,5),cyan) isolated_point(input,(6,9),cyan) isolated_point(input,(8,2),cyan)
+
+Output grid:
+ grid_size(output,10,10) horizontal_line(output,start(6,5),end(6,9),color(cyan),length(5)) isolated_point(output,(1,7),cyan) vertical_line(output,start(3,2),end(8,2),color(cyan),length(6))
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(3,1),cyan) isolated_point(input,(3,6),cyan) isolated_point(input,(7,4),cyan) isolated_point(input,(9,6),cyan)
+
+Output grid:
+ diagonal_line(output,start(3,5),end(4,6),color(cyan),length(2)) grid_size(output,10,10) horizontal_line(output,start(3,1),end(3,6),color(cyan),length(6)) isolated_point(output,(7,4),cyan) vertical_line(output,start(3,6),end(9,6),color(cyan),length(7))
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Rules (consistent across all examples)
+
+1. Grid size and colors are preserved.
+
+2. Horizontal lines: for any row that contains two or more input isolated points, create a horizontal_line of that color spanning from the minimum to the maximum column of those points (start = (row,min_col), end = (row,max_col)).
+
+3. Vertical lines: for any column that contains two or more input isolated points, create a vertical_line of that color spanning from the minimum to the maximum row of those points (start = (min_row,column), end = (max_row,column)).
+
+4. Isolated points: an input point that does not share its row or column with any other input point remains an isolated_point in the output.
+
+5. Corner diagonals: whenever a horizontal_line and a vertical_line meet at the same cell (i.e., their segments intersect at that cell and that cell is an endpoint of each line), add a diagonal_line of length 2 (same color) connecting the two cells that are one step into each line from the intersection. Concretely: if the intersection is at (r,c), take the horizontal neighbor (r,c_h) that lies one step toward the horizontal segment interior and the vertical neighbor (r_v,c) that lies one step toward the vertical segment interior; create a diagonal connecting (r_v,c) and (r,c_h).
+
+These rules produce the horizontal, vertical, isolated, and diagonal primitives seen in every output.
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(1,1),cyan) isolated_point(input,(2,3),cyan) isolated_point(input,(3,7),cyan) isolated_point(input,(5,1),cyan) isolated_point(input,(8,4),cyan) isolated_point(input,(8,7),cyan)
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+grid_size(output,10,10).
+
+horizontal_line(output,start(8,4),end(8,7),color(cyan)).
+vertical_line(output,start(1,1),end(5,1),color(cyan)).
+vertical_line(output,start(3,7),end(8,7),color(cyan)).
+
+isolated_point(output,(2,3),cyan).
+
+% Corner diagonal created because the horizontal (8,4)-(8,7) and vertical (3,7)-(8,7)
+% meet at their common endpoint (8,7). Add a length-2 diagonal between the cells
+% one step into each segment: (7,7) and (8,6).
+diagonal_line(output,start(7,7),end(8,6),color(cyan)).
+
+Natural language description:
+- Grid size and color preserved (10x10, cyan).
+- Row 8 has two input points -> a cyan horizontal line from (8,4) to (8,7).
+- Column 1 has two input points -> a cyan vertical line from (1,1) to (5,1).
+- Column 7 has two input points -> a cyan vertical line from (3,7) to (8,7).
+- The input point at (2,3) is unique in its row and column, so it remains an isolated cyan point.
+- Because the horizontal and vertical lines meet at the shared endpoint (8,7), a cyan diagonal of length 2 is added connecting (7,7) and (8,6).
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,10,10).
+horizontal_line(output,start(8,4),end(8,7),color(cyan),length(4)).
+vertical_line(output,start(1,1),end(5,1),color(cyan),length(5)).
+vertical_line(output,start(3,7),end(8,7),color(cyan),length(6)).
+point(output,(2,3),cyan).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,10,10).
+horizontal_line(output,start(8,4),end(8,7),color(cyan),length(4)).
+vertical_line(output,start(1,1),end(5,1),color(cyan),length(5)).
+vertical_line(output,start(3,7),end(8,7),color(cyan),length(6)).
+point(output,(2,3),cyan).
+STEP 7: Evaluation of Predicted Output Grid
+
+correct_grid

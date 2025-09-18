@@ -1,0 +1,16 @@
+grid(0,test,input,(3,3)).
+cell(0,test,input,((0,0),4)).
+cell(0,test,input,((0,1),4)).
+cell(0,test,input,((0,2),0)).
+cell(0,test,input,((1,0),4)).
+cell(0,test,input,((1,1),0)).
+cell(0,test,input,((1,2),4)).
+cell(0,test,input,((2,0),0)).
+cell(0,test,input,((2,1),0)).
+cell(0,test,input,((2,2),4)).
+grid(0,test,output,(1,5)).
+cell(0,test,output,((0,0),4)).
+cell(0,test,output,((0,1),4)).
+cell(0,test,output,((0,2),4)).
+cell(0,test,output,((0,3),4)).
+cell(0,test,output,((0,4),4)).

@@ -1,0 +1,59 @@
+instances/7
+Summary of consistent rule (applies to both examples)
+
+Given two isolated input points A (color cyan) at (rA,cA) and B (color orange) at (rB,cB) the output is constructed by drawing the full row and column for each point in that point's color, with overlaps between the two colors turned into red intersection cells. The solver represents those full rows/columns as maximal same-color segments (so lines are split where a red cell appears).
+
+Concretely, the output primitives produced are:
+
+- A cross primitive at each input point:
+  - cross(output, center(rA,cA), vertical(top(0,cA), bottom(...)), horizontal(left(...), right(...)), color(cyan))
+  - cross(output, center(rB,cB), vertical(top(...,cB), bottom( max_row,cB)), horizontal(left(...), right(...,cB)), color(orange))
+  (The vertical/horizontal arms are the maximal same-color segments of that column/row, i.e. they extend to grid edges but are split so they do not include the other color's intersection cell.)
+
+- Full-row horizontal segments for each input row in its color, split around the other point's column:
+  - horizontal_line(color=cyan) covering row rA from column 0 up to cB-1, and another segment (if any) from cB+1 to last column.
+  - horizontal_line(color=orange) covering row rB from column 0 up to cA-1, and another segment (if any) from cA+1 to last column.
+
+- Full-column vertical segments for each input column in its color, split around the other point's row:
+  - vertical_line(color=cyan) covering column cA from row 0 up to rB-1, and another segment (if any) from rB+1 to last row.
+  - vertical_line(color=orange) covering column cB from row 0 up to rA-1, and another segment (if any) from rA+1 to last row.
+
+- Red intersection points at the crossed cells:
+  - point(output,(rA,cB),red)
+  - point(output,(rB,cA),red)
+  (These are the cells where the cyan row meets the orange column and the orange row meets the cyan column; they are excluded from same-color segments and shown as red.)
+
+Notes
+- The solver's primitive list may express the full rows/columns as multiple horizontal_line / vertical_line primitives (and occasional isolated point primitives at segment endpoints) because it splits segments wherever a red intersection occurs. The overall visual effect is two full-colored crosses (one cyan, one orange) covering their rows and columns, with the two mutual intersections colored red.
+Input grid:
+ isolated_point(input,(1,4),cyan) isolated_point(input,(6,1),orange)
+
+Output grid:
+ 
+
+========================================
+
+Assumed grid size: 7x7 (rows and columns 0..6).  
+Rule applied: draw the full row and full column for each input point in that point's color; where the cyan row meets the orange column or the orange row meets the cyan column, place red cells and split same-color segments so they do not include those red intersections.
+
+Primitives in the output:
+
+- grid_size(output,7,7)
+  
+Cyan (input point at (1,4)):
+- horizontal_line(output,start(1,0),end(1,0),color(cyan))  // row 1 left segment up to column 0 (stops before orange column 1)
+- horizontal_line(output,start(1,2),end(1,6),color(cyan))  // row 1 right segment from column 2 to 6 (stops after orange column 1)
+- vertical_line(output,start(0,4),end(5,4),color(cyan))    // column 4 from row 0 down to row 5 (stops before orange row 6)
+
+Orange (input point at (6,1)):
+- horizontal_line(output,start(6,0),end(6,3),color(orange)) // row 6 left segment up to column 3 (stops before cyan column 4)
+- horizontal_line(output,start(6,5),end(6,6),color(orange)) // row 6 right segment from column 5 to 6 (stops after cyan column 4)
+- vertical_line(output,start(0,1),end(0,1),color(orange))   // column 1 top segment at row 0 (stops before cyan row 1)
+- vertical_line(output,start(2,1),end(6,1),color(orange))   // column 1 from row 2 down to row 6 (stops after cyan row 1)
+
+Red intersections (mutual crosses):
+- point(output,(1,1),red)  // cyan row 1 crosses orange column 1
+- point(output,(6,4),red)  // orange row 6 crosses cyan column 4
+
+Natural-language summary of the output grid:
+Two full-colored crosses: a cyan cross centered at (1,4) (row 1 and column 4) and an orange cross centered at (6,1) (row 6 and column 1). The two crossings where each cross meets the other's arm are colored red at (1,1) and (6,4); same-color row/column segments are split so they do not include those red intersection cells.

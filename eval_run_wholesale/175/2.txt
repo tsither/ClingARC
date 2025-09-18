@@ -1,0 +1,143 @@
+STEP 1: Extracted Primitives
+
+instances/175
+Results for grid_7.lp:
+Input grid:
+ grid_size(input,12,11) isolated_point(input,(1,3),cyan) isolated_point(input,(4,10),cyan) isolated_point(input,(4,6),cyan) isolated_point(input,(5,1),cyan) isolated_point(input,(9,3),cyan)
+
+Output grid:
+ grid_size(output,12,11) horizontal_line(output,start(4,7),end(4,9),color(green),length(3)) isolated_point(output,(5,1),cyan) point(output,(1,3),cyan) point(output,(4,10),cyan) point(output,(4,6),cyan) point(output,(9,3),cyan) vertical_line(output,start(2,3),end(8,3),color(green),length(7))
+
+========================================
+
+Results for grid_3.lp:
+Input grid:
+ grid_size(input,9,6) isolated_point(input,(1,2),cyan) isolated_point(input,(7,2),cyan)
+
+Output grid:
+ grid_size(output,9,6) point(output,(1,2),cyan) point(output,(7,2),cyan) vertical_line(output,start(2,2),end(6,2),color(green),length(5))
+
+========================================
+
+Results for grid_2.lp:
+Input grid:
+ grid_size(input,12,11) isolated_point(input,(1,1),cyan) isolated_point(input,(1,9),cyan) isolated_point(input,(8,2),cyan) isolated_point(input,(8,7),cyan)
+
+Output grid:
+ grid_size(output,12,11) horizontal_line(output,start(1,2),end(1,8),color(green),length(7)) horizontal_line(output,start(8,3),end(8,6),color(green),length(4)) point(output,(1,1),cyan) point(output,(1,9),cyan) point(output,(8,2),cyan) point(output,(8,7),cyan)
+
+========================================
+
+Results for grid_6.lp:
+Input grid:
+ grid_size(input,7,6) isolated_point(input,(1,3),cyan) isolated_point(input,(3,1),cyan) isolated_point(input,(6,3),cyan)
+
+Output grid:
+ grid_size(output,7,6) isolated_point(output,(3,1),cyan) point(output,(1,3),cyan) point(output,(6,3),cyan) vertical_line(output,start(2,3),end(5,3),color(green),length(4))
+
+========================================
+
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,10,11) isolated_point(input,(1,4),cyan) isolated_point(input,(2,8),cyan) isolated_point(input,(6,8),cyan) isolated_point(input,(7,4),cyan)
+
+Output grid:
+ grid_size(output,10,11) point(output,(1,4),cyan) point(output,(2,8),cyan) point(output,(6,8),cyan) point(output,(7,4),cyan) vertical_line(output,start(2,4),end(6,4),color(green),length(5)) vertical_line(output,start(3,8),end(5,8),color(green),length(3))
+
+========================================
+
+Results for grid_5.lp:
+Input grid:
+ grid_size(input,5,6) isolated_point(input,(1,1),cyan) isolated_point(input,(3,4),cyan)
+
+Output grid:
+ grid_size(output,5,6) isolated_point(output,(1,1),cyan) isolated_point(output,(3,4),cyan)
+
+========================================
+
+Results for grid_4.lp:
+Input grid:
+ grid_size(input,3,3) isolated_point(input,(1,1),cyan)
+
+Output grid:
+ grid_size(output,3,3) isolated_point(output,(1,1),cyan)
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,7,13) isolated_point(input,(3,2),cyan) isolated_point(input,(3,9),cyan)
+
+Output grid:
+ grid_size(output,7,13) horizontal_line(output,start(3,3),end(3,8),color(green),length(6)) point(output,(3,2),cyan) point(output,(3,9),cyan)
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Summary of consistent rule across all tasks:
+
+- Keep all original cyan points unchanged in the output.
+- For any row that contains two or more cyan points, draw a green horizontal line filling every cell strictly between the leftmost and rightmost cyan points on that row. Formally: if cyan points on row r have min_col = a and max_col = b and b > a+1, add horizontal_line(output,start(r,a+1),end(r,b-1),color(green),length(b-a-1)).
+- For any column that contains two or more cyan points, draw a green vertical line filling every cell strictly between the topmost and bottommost cyan points in that column. Formally: if cyan points in column c have min_row = p and max_row = q and q > p+1, add vertical_line(output,start(p+1,c),end(q-1,c),color(green),length(q-p-1)).
+- If no two cyan points share a row or column (or there is no cell strictly between them), add no line.
+
+These rules produce the green horizontal/vertical segments shown in the outputs while preserving all cyan points.
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ grid_size(input,12,13) isolated_point(input,(1,10),cyan) isolated_point(input,(1,2),cyan) isolated_point(input,(10,1),cyan) isolated_point(input,(5,12),cyan) isolated_point(input,(5,6),cyan) isolated_point(input,(7,1),cyan) isolated_point(input,(9,8),cyan)
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+Answer (primitives in the output plus short description)
+
+Primitives:
+- grid_size(output,12,13).
+- point(output,(1,2),cyan).
+- point(output,(1,10),cyan).
+- point(output,(5,6),cyan).
+- point(output,(5,12),cyan).
+- point(output,(7,1),cyan).
+- point(output,(9,8),cyan).
+- point(output,(10,1),cyan).
+- horizontal_line(output,start(1,3),end(1,9),color(green)).  % fills columns 3..9 on row 1 between (1,2) and (1,10)
+- horizontal_line(output,start(5,7),end(5,11),color(green)).  % fills columns 7..11 on row 5 between (5,6) and (5,12)
+- vertical_line(output,start(8,1),end(9,1),color(green)).     % fills rows 8..9 in column 1 between (7,1) and (10,1)
+
+Natural-language description:
+All original cyan points are preserved. Because row 1 contains cyan points at (1,2) and (1,10), a green horizontal segment is drawn across row 1 covering columns 3 through 9. Because row 5 contains cyan points at (5,6) and (5,12), a green horizontal segment is drawn across row 5 covering columns 7 through 11. Because column 1 contains cyan points at (7,1) and (10,1), a green vertical segment is drawn in column 1 covering rows 8 and 9. No other lines are added.
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,12,13).
+point(output,(1,10),cyan).
+point(output,(1,2),cyan).
+point(output,(10,1),cyan).
+point(output,(5,12),cyan).
+point(output,(5,6),cyan).
+point(output,(7,1),cyan).
+point(output,(9,8),cyan).
+horizontal_line(output,start(1,3),end(1,9),color(green),length(7)).
+horizontal_line(output,start(5,7),end(5,11),color(green),length(5)).
+vertical_line(output,start(8,1),end(9,1),color(green),length(2)).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,12,13).
+point(output,(1,10),cyan).
+point(output,(1,2),cyan).
+point(output,(10,1),cyan).
+point(output,(5,12),cyan).
+point(output,(5,6),cyan).
+point(output,(7,1),cyan).
+point(output,(9,8),cyan).
+horizontal_line(output,start(1,3),end(1,9),color(green),length(7)).
+horizontal_line(output,start(5,7),end(5,11),color(green),length(5)).
+vertical_line(output,start(8,1),end(9,1),color(green),length(2)).
+STEP 7: Evaluation of Predicted Output Grid
+
+correct_grid

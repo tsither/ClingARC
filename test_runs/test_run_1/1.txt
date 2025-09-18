@@ -1,0 +1,34 @@
+instances/1
+Observed consistent rule across examples:
+
+- Grid size is 3x3. For each row r (r = 0..2) find the input gray cell in that row (there is exactly one per row in the examples). Let its column be c (c = 0..2).
+- Produce a horizontal line covering the whole row: horizontal_line(output, start(r,0), end(r,2), length 3).
+- Color the horizontal line according to the column index c:
+  - c = 0 -> color(red)
+  - c = 1 -> color(yellow)
+  - c = 2 -> color(green)
+
+- Equivalent compact form: if all three rows map to the same color, the output may be represented as a filled 3x3 square of that color (as in the vertical-line example).
+
+Output primitives predicted: three horizontal_line primitives (one per row) with colors assigned by the column->color mapping above (or a single square when all rows share the same color).
+Input grid:
+ diagonal_line(input,start(1,0),end(2,1),color(gray),length(2)) isolated_point(input,(0,2),gray)
+
+Output grid:
+ 
+
+========================================
+
+Answer summary
+- Grid size is 3x3.
+- For each row r the gray input cell column c determines the row color: c=0 -> red, c=1 -> yellow, c=2 -> green.
+- We draw a full horizontal line across each row with the mapped color.
+
+Output primitives
+- grid_size(output,3,3)
+- horizontal_line(output,start(0,0),end(0,2),color(green))  % row 0: input gray at (0,2) -> c=2 -> green
+- horizontal_line(output,start(1,0),end(1,2),color(red))    % row 1: input gray at (1,0) -> c=0 -> red
+- horizontal_line(output,start(2,0),end(2,2),color(yellow)) % row 2: input gray at (2,1) -> c=1 -> yellow
+
+Natural-language description
+Row 0 is filled entirely green (because the gray cell in row 0 is at column 2). Row 1 is filled entirely red (gray at column 0). Row 2 is filled entirely yellow (gray at column 1).

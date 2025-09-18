@@ -1,0 +1,78 @@
+STEP 1: Extracted Primitives
+
+instances/16
+Results for grid_3.lp:
+Input grid:
+ diagonal_line(input,start(0,1),end(1,2),color(red),length(2)) grid_size(input,3,3) horizontal_line(input,start(0,1),end(0,2),color(red),length(2)) vertical_line(input,start(0,2),end(1,2),color(red),length(2))
+
+Output grid:
+ diagonal_line(output,start(1,1),end(2,2),color(red),length(2)) grid_size(output,3,3) horizontal_line(output,start(1,1),end(1,2),color(red),length(2)) vertical_line(output,start(1,2),end(2,2),color(red),length(2))
+
+========================================
+
+Results for grid_2.lp:
+Input grid:
+ diagonal_line(input,start(1,0),end(0,1),color(blue),length(2)) grid_size(input,3,3) horizontal_line(input,start(1,0),end(1,1),color(blue),length(2)) vertical_line(input,start(0,1),end(1,1),color(blue),length(2))
+
+Output grid:
+ diagonal_line(output,start(2,0),end(1,1),color(blue),length(2)) grid_size(output,3,3) horizontal_line(output,start(2,0),end(2,1),color(blue),length(2)) vertical_line(output,start(1,1),end(2,1),color(blue),length(2))
+
+========================================
+
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,3,3) horizontal_line(input,start(1,0),end(1,2),color(blue),length(3))
+
+Output grid:
+ grid_size(output,3,3) horizontal_line(output,start(2,0),end(2,2),color(blue),length(3))
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,3,3) horizontal_line(input,start(0,0),end(0,2),color(blue),length(3))
+
+Output grid:
+ grid_size(output,3,3) horizontal_line(output,start(1,0),end(1,2),color(blue),length(3))
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Summary rule:
+- The output grid is the same size as the input.
+- Every primitive in the input (point, horizontal_line, vertical_line, diagonal_line) is copied unchanged except all row coordinates (the first coordinate in each (X,Y)) are incremented by 1 (translated one cell downward). Colors, lengths and column coordinates remain the same.
+
+Formal mapping:
+- For each primitive with start(Xs,Ys) and end(Xe,Ye) in the input, the output has the same primitive with start(Xs+1,Ys) and end(Xe+1,Ye).
+- grid_size(input,W,H) -> grid_size(output,W,H)
+
+This rule yields the shown outputs (every shape moved down one row).
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ grid_size(input,3,3) vertical_line(input,start(0,0),end(1,0),color(red),length(2))
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+grid_size(output,3,3)
+vertical_line(output,start(1,0),end(2,0),color(red),length(2))
+
+Description:
+The output is the same 3x3 grid. The red vertical line from the input that occupied cells (0,0) and (1,0) has been translated down by one row and now occupies cells (1,0) and (2,0).
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,3,3).
+vertical_line(output,start(1,0),end(2,0),color(red),length(2)).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,3,3).
+vertical_line(output,start(1,0),end(2,0),color(red),length(2)).
+STEP 7: Evaluation of Predicted Output Grid
+
+incorrect_cell((1,0),(predicted(black),correct(red))) incorrect_cell((2,0),(predicted(black),correct(red))) incorrect_grid

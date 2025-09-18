@@ -1,0 +1,163 @@
+STEP 1: Extracted Primitives
+
+instances/47
+Results for grid_2.lp:
+Input grid:
+ grid_size(input,5,15) horizontal_line(input,start(4,2),end(4,3),color(red),length(2)) horizontal_line(input,start(4,8),end(4,9),color(red),length(2)) rectangle(input,top_left_corner(2,5),bottom_right_corner(4,6),height(3),width(2),color(yellow)) vertical_line(input,start(2,0),end(4,0),color(yellow),length(3)) vertical_line(input,start(3,1),end(4,1),color(green),length(2)) vertical_line(input,start(3,4),end(4,4),color(green),length(2)) vertical_line(input,start(3,7),end(4,7),color(green),length(2))
+
+Output grid:
+ grid_size(output,5,15) horizontal_line(output,start(4,2),end(4,3),color(red),length(2)) horizontal_line(output,start(4,8),end(4,9),color(red),length(2)) point(output,(4,14),red) rectangle(output,top_left_corner(2,11),bottom_right_corner(4,12),height(3),width(2),color(yellow)) rectangle(output,top_left_corner(2,5),bottom_right_corner(4,6),height(3),width(2),color(yellow)) vertical_line(output,start(2,0),end(4,0),color(yellow),length(3)) vertical_line(output,start(3,1),end(4,1),color(green),length(2)) vertical_line(output,start(3,10),end(4,10),color(green),length(2)) vertical_line(output,start(3,13),end(4,13),color(green),length(2)) vertical_line(output,start(3,4),end(4,4),color(green),length(2)) vertical_line(output,start(3,7),end(4,7),color(green),length(2))
+
+========================================
+
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,5,15) horizontal_line(input,start(4,0),end(4,1),color(green),length(2)) horizontal_line(input,start(4,4),end(4,5),color(green),length(2)) point(input,(4,3),blue) point(input,(4,7),blue) vertical_line(input,start(2,2),end(4,2),color(red),length(3)) vertical_line(input,start(2,6),end(4,6),color(red),length(3))
+
+Output grid:
+ grid_size(output,5,15) horizontal_line(output,start(4,0),end(4,1),color(green),length(2)) horizontal_line(output,start(4,12),end(4,13),color(green),length(2)) horizontal_line(output,start(4,4),end(4,5),color(green),length(2)) horizontal_line(output,start(4,8),end(4,9),color(green),length(2)) point(output,(4,11),blue) point(output,(4,3),blue) point(output,(4,7),blue) vertical_line(output,start(2,10),end(4,10),color(red),length(3)) vertical_line(output,start(2,14),end(4,14),color(red),length(3)) vertical_line(output,start(2,2),end(4,2),color(red),length(3)) vertical_line(output,start(2,6),end(4,6),color(red),length(3))
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,5,15) point(input,(4,0),blue) point(input,(4,3),blue) point(input,(4,6),blue) square(input,top_left_corner(3,1),bottom_right_corner(4,2),size(2),color(red)) square(input,top_left_corner(3,4),bottom_right_corner(4,5),size(2),color(red))
+
+Output grid:
+ grid_size(output,5,15) point(output,(4,0),blue) point(output,(4,12),blue) point(output,(4,3),blue) point(output,(4,6),blue) point(output,(4,9),blue) square(output,top_left_corner(3,1),bottom_right_corner(4,2),size(2),color(red)) square(output,top_left_corner(3,10),bottom_right_corner(4,11),size(2),color(red)) square(output,top_left_corner(3,13),bottom_right_corner(4,14),size(2),color(red)) square(output,top_left_corner(3,4),bottom_right_corner(4,5),size(2),color(red)) square(output,top_left_corner(3,7),bottom_right_corner(4,8),size(2),color(red))
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Summary of transformation (consistent across all examples)
+
+- Find, for each primitive type+color, the horizontal translation vector equal to the distance in columns between the first two occurrences of that same primitive in the input. 
+- Repeatedly translate (copy) that primitive to the right by that vector until no further full-translation fits inside the grid width. Keep all properties (shape, orientation, color, length/size).
+- If a translated copy would go partially out of bounds (e.g. a horizontal line of length >1 would not fully fit), place the maximal in-grid cell(s) as the appropriate reduced primitive (examples give a single point when only one cell remains).
+- Originals are preserved.
+
+How this yields the shown outputs
+- grid_0: distance between blue points = 3 -> copy blue points every +3 columns (0,3,6,9,12). Distance between red squares = 3 -> copy squares every +3 (start cols 1,4,7,10,13).
+- grid_1: distance between green horizontals = 4 -> copy at starts 0,4,8,12. Distance between red verticals = 4 -> copy at cols 2,6,10,14. Distance between blue points = 4 -> copy at cols 3,7,11.
+- grid_2: distances found: green verticals = 3 -> copy at 1,4,7,10,13; red horizontals = 6 -> copy starts 2,8,14 (the last cannot accommodate length-2 so it becomes a single red point at (4,14)); yellow rectangles = 6 -> copy at starts 5 and 11. Yellow vertical at col 0 is preserved and also falls into the same tiling scheme.
+
+Primitives in outputs are therefore the original primitives plus their rightward copies at the determined interval, truncated if necessary at the grid edge.
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ diagonal_line(input,start(3,0),end(4,1),color(magenta),length(2)) diagonal_line(input,start(3,1),end(2,2),color(red),length(2)) diagonal_line(input,start(3,1),end(4,2),color(red),length(2)) diagonal_line(input,start(3,4),end(4,5),color(magenta),length(2)) diagonal_line(input,start(3,5),end(2,6),color(red),length(2)) diagonal_line(input,start(3,5),end(4,6),color(red),length(2)) diagonal_line(input,start(3,8),end(4,9),color(magenta),length(2)) grid_size(input,5,15) horizontal_line(input,start(3,1),end(3,2),color(red),length(2)) horizontal_line(input,start(3,5),end(3,6),color(red),length(2)) horizontal_line(input,start(4,0),end(4,1),color(magenta),length(2)) horizontal_line(input,start(4,4),end(4,5),color(magenta),length(2)) horizontal_line(input,start(4,8),end(4,9),color(magenta),length(2)) point(input,(3,9),red) point(input,(4,3),green) point(input,(4,7),green) vertical_line(input,start(2,2),end(4,2),color(red),length(3)) vertical_line(input,start(2,6),end(4,6),color(red),length(3)) vertical_line(input,start(3,0),end(4,0),color(magenta),length(2)) vertical_line(input,start(3,4),end(4,4),color(magenta),length(2)) vertical_line(input,start(3,8),end(4,8),color(magenta),length(2))
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+Rule application (short): The horizontal translation vector is 4 columns for each primitive type+color (distance between the first two occurrences). Each primitive is copied rightward by +4 repeatedly (0,4,8,12, ...) while preserving shape, orientation, length and color. Originals remain. No copy requires truncation (all copies fit inside cols 0..14).
+
+Output primitives (grid size 5x15) — originals plus their +4-column copies:
+
+grid_size(output,5,15)
+
+Magenta diagonals (down-right):
+diagonal_line(output,start(3,0),end(4,1),color(magenta),length(2))
+diagonal_line(output,start(3,4),end(4,5),color(magenta),length(2))
+diagonal_line(output,start(3,8),end(4,9),color(magenta),length(2))
+diagonal_line(output,start(3,12),end(4,13),color(magenta),length(2))
+
+Magenta horizontals (row 4, length 2):
+horizontal_line(output,start(4,0),end(4,1),color(magenta),length(2))
+horizontal_line(output,start(4,4),end(4,5),color(magenta),length(2))
+horizontal_line(output,start(4,8),end(4,9),color(magenta),length(2))
+horizontal_line(output,start(4,12),end(4,13),color(magenta),length(2))
+
+Magenta verticals (length 2):
+vertical_line(output,start(3,0),end(4,0),color(magenta),length(2))
+vertical_line(output,start(3,4),end(4,4),color(magenta),length(2))
+vertical_line(output,start(3,8),end(4,8),color(magenta),length(2))
+vertical_line(output,start(3,12),end(4,12),color(magenta),length(2))
+
+Red up-right diagonals:
+diagonal_line(output,start(3,1),end(2,2),color(red),length(2))
+diagonal_line(output,start(3,5),end(2,6),color(red),length(2))
+diagonal_line(output,start(3,9),end(2,10),color(red),length(2))
+diagonal_line(output,start(3,13),end(2,14),color(red),length(2))
+
+Red down-right diagonals:
+diagonal_line(output,start(3,1),end(4,2),color(red),length(2))
+diagonal_line(output,start(3,5),end(4,6),color(red),length(2))
+diagonal_line(output,start(3,9),end(4,10),color(red),length(2))
+diagonal_line(output,start(3,13),end(4,14),color(red),length(2))
+
+Red horizontals (row 3, length 2):
+horizontal_line(output,start(3,1),end(3,2),color(red),length(2))
+horizontal_line(output,start(3,5),end(3,6),color(red),length(2))
+horizontal_line(output,start(3,9),end(3,10),color(red),length(2))
+horizontal_line(output,start(3,13),end(3,14),color(red),length(2))
+
+Red verticals (length 3):
+vertical_line(output,start(2,2),end(4,2),color(red),length(3))
+vertical_line(output,start(2,6),end(4,6),color(red),length(3))
+vertical_line(output,start(2,10),end(4,10),color(red),length(3))
+vertical_line(output,start(2,14),end(4,14),color(red),length(3))
+
+Red point (single original, no vector computed):
+point(output,(3,9),red)
+
+Green points (copied by +4):
+point(output,(4,3),green)
+point(output,(4,7),green)
+point(output,(4,11),green)
+
+Summary description: Every primitive has been tiled rightwards by +4 columns (0,4,8,12) producing repeated columns of magenta shapes at cols 0/4/8/12, red shapes at cols 1/5/9/13 (verticals also at 2/6/10/14), and green points at cols 3/7/11. Originals are preserved; no truncation was necessary.
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,5,15).
+horizontal_line(output,start(4,0),end(4,1),color(magenta),length(2)).
+horizontal_line(output,start(4,4),end(4,5),color(magenta),length(2)).
+horizontal_line(output,start(4,8),end(4,9),color(magenta),length(2)).
+horizontal_line(output,start(4,12),end(4,13),color(magenta),length(2)).
+vertical_line(output,start(3,0),end(4,0),color(magenta),length(2)).
+vertical_line(output,start(3,4),end(4,4),color(magenta),length(2)).
+vertical_line(output,start(3,8),end(4,8),color(magenta),length(2)).
+vertical_line(output,start(3,12),end(4,12),color(magenta),length(2)).
+horizontal_line(output,start(3,1),end(3,2),color(red),length(2)).
+horizontal_line(output,start(3,5),end(3,6),color(red),length(2)).
+horizontal_line(output,start(3,9),end(3,10),color(red),length(2)).
+horizontal_line(output,start(3,13),end(3,14),color(red),length(2)).
+vertical_line(output,start(2,2),end(4,2),color(red),length(3)).
+vertical_line(output,start(2,6),end(4,6),color(red),length(3)).
+vertical_line(output,start(2,10),end(4,10),color(red),length(3)).
+vertical_line(output,start(2,14),end(4,14),color(red),length(3)).
+point(output,(3,9),red).
+point(output,(4,3),green).
+point(output,(4,7),green).
+point(output,(4,11),green).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,5,15).
+horizontal_line(output,start(4,0),end(4,1),color(magenta),length(2)).
+horizontal_line(output,start(4,4),end(4,5),color(magenta),length(2)).
+horizontal_line(output,start(4,8),end(4,9),color(magenta),length(2)).
+horizontal_line(output,start(4,12),end(4,13),color(magenta),length(2)).
+vertical_line(output,start(3,0),end(4,0),color(magenta),length(2)).
+vertical_line(output,start(3,4),end(4,4),color(magenta),length(2)).
+vertical_line(output,start(3,8),end(4,8),color(magenta),length(2)).
+vertical_line(output,start(3,12),end(4,12),color(magenta),length(2)).
+horizontal_line(output,start(3,1),end(3,2),color(red),length(2)).
+horizontal_line(output,start(3,5),end(3,6),color(red),length(2)).
+horizontal_line(output,start(3,9),end(3,10),color(red),length(2)).
+horizontal_line(output,start(3,13),end(3,14),color(red),length(2)).
+vertical_line(output,start(2,2),end(4,2),color(red),length(3)).
+vertical_line(output,start(2,6),end(4,6),color(red),length(3)).
+vertical_line(output,start(2,10),end(4,10),color(red),length(3)).
+vertical_line(output,start(2,14),end(4,14),color(red),length(3)).
+point(output,(3,9),red).
+point(output,(4,3),green).
+point(output,(4,7),green).
+point(output,(4,11),green).
+STEP 7: Evaluation of Predicted Output Grid
+
+correct_grid

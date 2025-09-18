@@ -1,0 +1,170 @@
+STEP 1: Extracted Primitives
+
+instances/65
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(0,5),blue) isolated_point(input,(2,0),blue) isolated_point(input,(3,9),blue) isolated_point(input,(5,5),blue) isolated_point(input,(8,2),blue) isolated_point(input,(9,9),blue)
+
+Output grid:
+ grid_size(output,10,10) point(output,(0,4),orange) point(output,(0,5),blue) point(output,(0,6),magenta) point(output,(1,0),red) point(output,(1,5),cyan) point(output,(2,0),blue) point(output,(2,1),magenta) point(output,(2,9),red) point(output,(3,0),cyan) point(output,(3,8),orange) point(output,(3,9),blue) point(output,(4,5),red) point(output,(4,9),cyan) point(output,(5,4),orange) point(output,(5,5),blue) point(output,(5,6),magenta) point(output,(6,5),cyan) point(output,(7,2),red) point(output,(8,1),orange) point(output,(8,2),blue) point(output,(8,3),magenta) point(output,(8,9),red) point(output,(9,2),cyan) point(output,(9,8),orange) point(output,(9,9),blue)
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(1,6),blue) isolated_point(input,(3,9),blue) isolated_point(input,(5,3),blue) isolated_point(input,(7,7),blue) isolated_point(input,(9,1),blue)
+
+Output grid:
+ grid_size(output,10,10) point(output,(0,6),red) point(output,(1,5),orange) point(output,(1,6),blue) point(output,(1,7),magenta) point(output,(2,6),cyan) point(output,(2,9),red) point(output,(3,8),orange) point(output,(3,9),blue) point(output,(4,3),red) point(output,(4,9),cyan) point(output,(5,2),orange) point(output,(5,3),blue) point(output,(5,4),magenta) point(output,(6,3),cyan) point(output,(6,7),red) point(output,(7,6),orange) point(output,(7,7),blue) point(output,(7,8),magenta) point(output,(8,1),red) point(output,(8,7),cyan) point(output,(9,0),orange) point(output,(9,1),blue) point(output,(9,2),magenta)
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Summary rule (consistent across both pairs)
+
+- Grid size is unchanged.
+- Every input isolated blue point at (r,c) is preserved as a blue point at (r,c) in the output.
+- For each such blue point add its 4-neighborhood neighbors (only if the neighbor cell is inside the grid) with fixed colors:
+  - (r-1,c) — red (up)
+  - (r+1,c) — cyan (down)
+  - (r,c-1) — orange (left)
+  - (r,c+1) — magenta (right)
+
+No other cells are added or changed.
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(0,1),blue) isolated_point(input,(0,9),blue) isolated_point(input,(2,7),blue) isolated_point(input,(3,3),blue) isolated_point(input,(6,0),blue) isolated_point(input,(6,7),blue) isolated_point(input,(9,4),blue)
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+grid_size(output,10,10)
+point(output,(0,1),blue)
+point(output,(0,9),blue)
+point(output,(2,7),blue)
+point(output,(3,3),blue)
+point(output,(6,0),blue)
+point(output,(6,7),blue)
+point(output,(9,4),blue)
+
+point(output,(1,1),cyan)
+point(output,(0,0),orange)
+point(output,(0,2),magenta)
+
+point(output,(1,9),cyan)
+point(output,(0,8),orange)
+
+point(output,(1,7),red)
+point(output,(3,7),cyan)
+point(output,(2,6),orange)
+point(output,(2,8),magenta)
+
+point(output,(2,3),red)
+point(output,(4,3),cyan)
+point(output,(3,2),orange)
+point(output,(3,4),magenta)
+
+point(output,(5,0),red)
+point(output,(7,0),cyan)
+point(output,(6,1),magenta)
+
+point(output,(5,7),red)
+point(output,(7,7),cyan)
+point(output,(6,6),orange)
+point(output,(6,8),magenta)
+
+point(output,(8,4),red)
+point(output,(9,3),orange)
+point(output,(9,5),magenta)
+
+Description:
+The output grid keeps the same 10x10 size. Each blue isolated point from the input is preserved at the same coordinates. For each preserved blue point at (r,c) its 4-neighborhood within the grid is added with fixed colors: the cell above (r-1,c) is red, below (r+1,c) is cyan, left (r,c-1) is orange, and right (r,c+1) is magenta. No other cells are changed or added.
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,10,10).
+point(output,(0,1),blue).
+point(output,(0,9),blue).
+point(output,(2,7),blue).
+point(output,(3,3),blue).
+point(output,(6,0),blue).
+point(output,(6,7),blue).
+point(output,(9,4),blue).
+
+point(output,(1,1),cyan).
+point(output,(0,0),orange).
+point(output,(0,2),magenta).
+
+point(output,(1,9),cyan).
+point(output,(0,8),orange).
+
+point(output,(1,7),red).
+point(output,(3,7),cyan).
+point(output,(2,6),orange).
+point(output,(2,8),magenta).
+
+point(output,(2,3),red).
+point(output,(4,3),cyan).
+point(output,(3,2),orange).
+point(output,(3,4),magenta).
+
+point(output,(5,0),red).
+point(output,(7,0),cyan).
+point(output,(6,1),magenta).
+
+point(output,(5,7),red).
+point(output,(7,7),cyan).
+point(output,(6,6),orange).
+point(output,(6,8),magenta).
+
+point(output,(8,4),red).
+point(output,(9,3),orange).
+point(output,(9,5),magenta).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,10,10).
+point(output,(0,1),blue).
+point(output,(0,9),blue).
+point(output,(2,7),blue).
+point(output,(3,3),blue).
+point(output,(6,0),blue).
+point(output,(6,7),blue).
+point(output,(9,4),blue).
+
+point(output,(1,1),cyan).
+point(output,(0,0),orange).
+point(output,(0,2),magenta).
+
+point(output,(1,9),cyan).
+point(output,(0,8),orange).
+
+point(output,(1,7),red).
+point(output,(3,7),cyan).
+point(output,(2,6),orange).
+point(output,(2,8),magenta).
+
+point(output,(2,3),red).
+point(output,(4,3),cyan).
+point(output,(3,2),orange).
+point(output,(3,4),magenta).
+
+point(output,(5,0),red).
+point(output,(7,0),cyan).
+point(output,(6,1),magenta).
+
+point(output,(5,7),red).
+point(output,(7,7),cyan).
+point(output,(6,6),orange).
+point(output,(6,8),magenta).
+
+point(output,(8,4),red).
+point(output,(9,3),orange).
+point(output,(9,5),magenta).
+STEP 7: Evaluation of Predicted Output Grid
+
+correct_grid

@@ -1,0 +1,13 @@
+grid(3,train,input,(4,2)).
+cell(3,train,input,((0,0),2)).
+cell(3,train,input,((0,1),2)).
+cell(3,train,input,((1,0),6)).
+cell(3,train,input,((1,1),6)).
+cell(3,train,input,((2,0),8)).
+cell(3,train,input,((2,1),8)).
+cell(3,train,input,((3,0),8)).
+cell(3,train,input,((3,1),8)).
+grid(3,train,output,(3,1)).
+cell(3,train,output,((0,0),2)).
+cell(3,train,output,((1,0),6)).
+cell(3,train,output,((2,0),8)).

@@ -1,0 +1,155 @@
+STEP 1: Extracted Primitives
+
+instances/48
+Results for grid_2.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(0,3),magenta) isolated_point(input,(0,5),cyan) isolated_point(input,(2,2),yellow) isolated_point(input,(3,0),magenta) isolated_point(input,(4,9),cyan) isolated_point(input,(5,4),brown) isolated_point(input,(6,6),yellow) isolated_point(input,(9,0),brown)
+
+Output grid:
+ diagonal_line(output,start(0,5),end(4,9),color(cyan),length(5)) diagonal_line(output,start(2,2),end(6,6),color(yellow),length(5)) diagonal_line(output,start(3,0),end(0,3),color(magenta),length(4)) diagonal_line(output,start(9,0),end(5,4),color(brown),length(5)) grid_size(output,10,10) point(output,(1,2),magenta) point(output,(2,1),magenta) point(output,(2,2),yellow) point(output,(4,4),yellow) point(output,(5,4),brown) point(output,(5,5),yellow)
+
+========================================
+
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(0,0),brown) isolated_point(input,(0,7),green) isolated_point(input,(2,6),cyan) isolated_point(input,(2,9),green) isolated_point(input,(3,3),brown) isolated_point(input,(5,5),orange) isolated_point(input,(7,1),cyan) isolated_point(input,(9,9),orange)
+
+Output grid:
+ diagonal_line(output,start(0,0),end(3,3),color(brown),length(4)) diagonal_line(output,start(0,7),end(2,9),color(green),length(3)) diagonal_line(output,start(5,5),end(9,9),color(orange),length(5)) diagonal_line(output,start(7,1),end(2,6),color(cyan),length(6)) grid_size(output,10,10)
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(0,2),red) isolated_point(input,(0,5),magenta) isolated_point(input,(2,0),red) isolated_point(input,(4,9),magenta) isolated_point(input,(5,3),yellow) isolated_point(input,(9,7),yellow)
+
+Output grid:
+ diagonal_line(output,start(0,5),end(4,9),color(magenta),length(5)) diagonal_line(output,start(2,0),end(0,2),color(red),length(3)) diagonal_line(output,start(5,3),end(9,7),color(yellow),length(5)) grid_size(output,10,10)
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Summary of consistent rule across all examples
+
+- Preserve the grid_size.
+
+- For each color, find input isolated points that lie on a 45° diagonal (slope ±1). If two (or more) such same-colored input points lie on the same 45° diagonal, produce a diagonal_line primitive for that color whose endpoints are the extreme cells on that diagonal (these endpoints correspond to the input points). The diagonal_line length = number of cells along that diagonal (inclusive).
+
+- All cells on each produced diagonal are considered filled in the output with the same color (represented by the diagonal_line primitive; examples sometimes also list the individual intermediate cells as point primitives).
+
+Primitives expected in the output (given the input):
+- grid_size(output, same as input)
+- For every pair/set of same-colored input isolated points lying on a 45° diagonal: diagonal_line(output,start(endpoint1),end(endpoint2),color(same),length(N))
+- (Optionally) point(output,(r,c),color) for any intermediate cells on those diagonals (these are the cells covered by the diagonal_line).
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(0,6),green) isolated_point(input,(0,9),brown) isolated_point(input,(1,0),orange) isolated_point(input,(3,3),green) isolated_point(input,(3,6),brown) isolated_point(input,(4,0),magenta) isolated_point(input,(5,9),yellow) isolated_point(input,(7,3),magenta) isolated_point(input,(7,6),orange) isolated_point(input,(9,5),yellow)
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+grid_size(output,10,10).
+
+Diagonal primitives (filled cells are all cells along each 45° diagonal between the given endpoints):
+
+diagonal_line(output,start(0,6),end(3,3),color(green),length(4)).
+  point(output,(0,6),green).
+  point(output,(1,5),green).
+  point(output,(2,4),green).
+  point(output,(3,3),green).
+
+diagonal_line(output,start(0,9),end(3,6),color(brown),length(4)).
+  point(output,(0,9),brown).
+  point(output,(1,8),brown).
+  point(output,(2,7),brown).
+  point(output,(3,6),brown).
+
+diagonal_line(output,start(1,0),end(7,6),color(orange),length(7)).
+  point(output,(1,0),orange).
+  point(output,(2,1),orange).
+  point(output,(3,2),orange).
+  point(output,(4,3),orange).
+  point(output,(5,4),orange).
+  point(output,(6,5),orange).
+  point(output,(7,6),orange).
+
+diagonal_line(output,start(4,0),end(7,3),color(magenta),length(4)).
+  point(output,(4,0),magenta).
+  point(output,(5,1),magenta).
+  point(output,(6,2),magenta).
+  point(output,(7,3),magenta).
+
+diagonal_line(output,start(5,9),end(9,5),color(yellow),length(5)).
+  point(output,(5,9),yellow).
+  point(output,(6,8),yellow).
+  point(output,(7,7),yellow).
+  point(output,(8,6),yellow).
+  point(output,(9,5),yellow).
+
+Natural-language summary:
+- Grid size preserved (10x10).
+- For each color, same-colored isolated input points that lie on a 45° diagonal were connected into a diagonal_line between the extreme input-point endpoints.
+- All cells along those diagonals are filled with the same color (listed above as point primitives).
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,10,10).
+point(output,(0,6),green).
+point(output,(1,5),green).
+point(output,(2,4),green).
+point(output,(3,3),green).
+point(output,(0,9),brown).
+point(output,(1,8),brown).
+point(output,(2,7),brown).
+point(output,(3,6),brown).
+point(output,(1,0),orange).
+point(output,(2,1),orange).
+point(output,(3,2),orange).
+point(output,(4,3),orange).
+point(output,(5,4),orange).
+point(output,(6,5),orange).
+point(output,(7,6),orange).
+point(output,(4,0),magenta).
+point(output,(5,1),magenta).
+point(output,(6,2),magenta).
+point(output,(7,3),magenta).
+point(output,(5,9),yellow).
+point(output,(6,8),yellow).
+point(output,(7,7),yellow).
+point(output,(8,6),yellow).
+point(output,(9,5),yellow).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,10,10).
+point(output,(0,6),green).
+point(output,(1,5),green).
+point(output,(2,4),green).
+point(output,(3,3),green).
+point(output,(0,9),brown).
+point(output,(1,8),brown).
+point(output,(2,7),brown).
+point(output,(3,6),brown).
+point(output,(1,0),orange).
+point(output,(2,1),orange).
+point(output,(3,2),orange).
+point(output,(4,3),orange).
+point(output,(5,4),orange).
+point(output,(6,5),orange).
+point(output,(7,6),orange).
+point(output,(4,0),magenta).
+point(output,(5,1),magenta).
+point(output,(6,2),magenta).
+point(output,(7,3),magenta).
+point(output,(5,9),yellow).
+point(output,(6,8),yellow).
+point(output,(7,7),yellow).
+point(output,(8,6),yellow).
+point(output,(9,5),yellow).
+STEP 7: Evaluation of Predicted Output Grid
+
+correct_grid

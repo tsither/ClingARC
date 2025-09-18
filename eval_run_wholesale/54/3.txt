@@ -1,0 +1,91 @@
+STEP 1: Extracted Primitives
+
+instances/54
+Results for grid_2.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(1,1),cyan) isolated_point(input,(1,5),cyan) isolated_point(input,(4,1),cyan) isolated_point(input,(7,5),cyan) isolated_point(input,(7,9),cyan) isolated_point(input,(9,2),cyan)
+
+Output grid:
+ diagonal_line(output,start(1,4),end(2,5),color(cyan),length(2)) diagonal_line(output,start(2,1),end(1,2),color(cyan),length(2)) diagonal_line(output,start(6,5),end(7,6),color(cyan),length(2)) grid_size(output,10,10) horizontal_line(output,start(1,1),end(1,5),color(cyan),length(5)) horizontal_line(output,start(7,5),end(7,9),color(cyan),length(5)) isolated_point(output,(9,2),cyan) vertical_line(output,start(1,1),end(4,1),color(cyan),length(4)) vertical_line(output,start(1,5),end(7,5),color(cyan),length(7))
+
+========================================
+
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(1,7),cyan) isolated_point(input,(3,2),cyan) isolated_point(input,(6,5),cyan) isolated_point(input,(6,9),cyan) isolated_point(input,(8,2),cyan)
+
+Output grid:
+ grid_size(output,10,10) horizontal_line(output,start(6,5),end(6,9),color(cyan),length(5)) isolated_point(output,(1,7),cyan) vertical_line(output,start(3,2),end(8,2),color(cyan),length(6))
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(3,1),cyan) isolated_point(input,(3,6),cyan) isolated_point(input,(7,4),cyan) isolated_point(input,(9,6),cyan)
+
+Output grid:
+ diagonal_line(output,start(3,5),end(4,6),color(cyan),length(2)) grid_size(output,10,10) horizontal_line(output,start(3,1),end(3,6),color(cyan),length(6)) isolated_point(output,(7,4),cyan) vertical_line(output,start(3,6),end(9,6),color(cyan),length(7))
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+General rule (applies to all examples)
+
+- Keep grid_size unchanged.
+
+- For each color (here cyan) do:
+  - If a row contains two or more input points, draw one horizontal_line from the minimum column to the maximum column in that row (inclusive).
+  - If a column contains two or more input points, draw one vertical_line from the minimum row to the maximum row in that column (inclusive).
+  - Any input point that is not on any of those horizontal/vertical lines remains an isolated_point in the output.
+
+- For every input point that is an endpoint where a horizontal and a vertical line meet (i.e. the point has both a same-row partner and a same-column partner), add a 2-cell diagonal_line that fills the interior corner of the L:
+  - Let the meeting point be (r,c).
+  - Let sign_h = +1 if the horizontal line from (r,c) extends to the right, -1 if it extends to the left.
+  - Let sign_v = +1 if the vertical line from (r,c) extends downward, -1 if it extends upward.
+  - Place a diagonal between the two adjacent cells (r + sign_v, c) and (r, c + sign_h) (these two cells are diagonally adjacent and form the small 2-cell corner diagonal). The diagonal length is 2 and its orientation follows those two cells.
+
+This set of rules accounts for all horizontal, vertical, diagonal, and isolated-point primitives seen in the outputs.
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ grid_size(input,10,10) isolated_point(input,(1,1),cyan) isolated_point(input,(2,3),cyan) isolated_point(input,(3,7),cyan) isolated_point(input,(5,1),cyan) isolated_point(input,(8,4),cyan) isolated_point(input,(8,7),cyan)
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+grid_size(output,10,10)
+horizontal_line(output,start(8,4),end(8,7),color(cyan))
+vertical_line(output,start(1,1),end(5,1),color(cyan))
+vertical_line(output,start(3,7),end(8,7),color(cyan))
+diagonal_line(output,start(7,7),end(8,6),color(cyan))
+isolated_point(output,(2,3),cyan)
+
+Description:
+- Grid size unchanged (10x10).
+- Row 8 has two input cyan points so draw a horizontal cyan line from (8,4) to (8,7).
+- Column 1 has two input cyan points so draw a vertical cyan line from (1,1) to (5,1).
+- Column 7 has two input cyan points so draw a vertical cyan line from (3,7) to (8,7).
+- The input point (8,7) is where a horizontal and vertical line meet; add the 2-cell diagonal filling the interior corner between (7,7) and (8,6).
+- Any input point not on any drawn line remains isolated: (2,3) stays an isolated cyan point.
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,10,10).
+horizontal_line(output,start(8,4),end(8,7),color(cyan),length(4)).
+vertical_line(output,start(1,1),end(5,1),color(cyan),length(5)).
+vertical_line(output,start(3,7),end(8,7),color(cyan),length(6)).
+point(output,(2,3),cyan).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,10,10).
+horizontal_line(output,start(8,4),end(8,7),color(cyan),length(4)).
+vertical_line(output,start(1,1),end(5,1),color(cyan),length(5)).
+vertical_line(output,start(3,7),end(8,7),color(cyan),length(6)).
+point(output,(2,3),cyan).
+STEP 7: Evaluation of Predicted Output Grid
+
+correct_grid

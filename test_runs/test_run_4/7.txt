@@ -1,0 +1,113 @@
+STEP 1: Extracted Primitives
+
+instances/7
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,9,9) isolated_point(input,(1,3),cyan) isolated_point(input,(7,6),orange)
+
+Output grid:
+ cross(output,center(1,3),vertical(top(0,3),bottom(6,3)),horizontal(left(1,0),right(1,5)),color(cyan)) cross(output,center(7,6),vertical(top(2,6),bottom(8,6)),horizontal(left(7,4),right(7,8)),color(orange)) grid_size(output,9,9) horizontal_line(output,start(1,7),end(1,8),color(cyan),length(2)) horizontal_line(output,start(7,0),end(7,2),color(orange),length(3)) point(output,(0,6),orange) point(output,(1,6),red) point(output,(7,3),red) point(output,(8,3),cyan)
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,9,9) isolated_point(input,(2,2),cyan) isolated_point(input,(6,6),orange)
+
+Output grid:
+ cross(output,center(2,2),vertical(top(0,2),bottom(5,2)),horizontal(left(2,0),right(2,5)),color(cyan)) cross(output,center(6,6),vertical(top(3,6),bottom(8,6)),horizontal(left(6,3),right(6,8)),color(orange)) grid_size(output,9,9) horizontal_line(output,start(2,7),end(2,8),color(cyan),length(2)) horizontal_line(output,start(6,0),end(6,1),color(orange),length(2)) intersection(output,center((2,6),red),vertical(length(8),orange),horizontal(length(8),cyan)) intersection(output,center((6,2),red),vertical(length(8),cyan),horizontal(length(8),orange)) point(output,(2,6),red) point(output,(6,2),red) vertical_line(output,start(0,6),end(1,6),color(orange),length(2)) vertical_line(output,start(7,2),end(8,2),color(cyan),length(2))
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Summary of inferred rule (applies to both examples)
+
+Given two isolated input points P1 = (r1,c1,color A) and P2 = (r2,c2,color B) (assume r1 < r2 and c1 < c2 as in the examples), the output contains the following primitives (grid size preserved):
+
+1. Two crosses centered on the original points:
+   - Cross at P1, color A:
+     - vertical arm at column c1 from row 0 down to row r2-1 (vertical(top(0,c1),bottom(r2-1,c1)) )
+     - horizontal arm at row r1 from column 0 to column c2-1 (horizontal(left(r1,0),right(r1,c2-1)) )
+   - Cross at P2, color B:
+     - vertical arm at column c2 from row r1+1 to row H-1 (bottom) (vertical(top(r1+1,c2),bottom(H-1,c2)) )
+     - horizontal arm at row r2 from column c1+1 to column W-1 (right) (horizontal(left(r2,c1+1),right(r2,W-1)) )
+
+2. Two red intersection points at the off-diagonal coordinates:
+   - red point at (r1,c2)
+   - red point at (r2,c1)
+
+3. Four short “tails” that extend beyond the rectangle between the two centers:
+   - Horizontal tail of color A on row r1 from column c2+1 to W-1 (may be absent if c2 = W-1).
+   - Horizontal tail of color B on row r2 from column 0 to c1-1 (may be absent if c1 = 0).
+   - Vertical tail of color B on column c2 from row 0 to r1-1 (may be absent if r1 = 0).
+   - Vertical tail of color A on column c1 from row r2+1 to H-1 (may be absent if r2 = H-1).
+   - When these tails are length 1 they appear as single colored points; when longer they are reported as lines.
+
+All created crosses, tails, and intersection points use the same colors described above (A, B, and red for the two intersection cells).
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ grid_size(input,9,9) isolated_point(input,(1,4),cyan) isolated_point(input,(6,1),orange)
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+Grid size preserved: grid_size(output,9,9).
+
+Interpretation and rule application (adapted for c2 < c1):
+- The higher point is P_top = (1,4) color cyan; the lower point is P_bot = (6,1) color orange.
+- Two crosses are drawn centered on the original points. Each cross's vertical arm spans from the top/bottom grid edge toward (but stopping just before) the other center's row; each horizontal arm spans from the center outward but stops before the column of the opposite center (so the opposite-column cells become red intersection points).
+- Two red intersection points placed at the off-diagonal coordinates (1,1) and (6,4).
+- Four tails placed beyond the rectangle between centers:
+  - a single cyan point at (1,0) (left tail of the top cross),
+  - a single orange point at (0,1) (top tail of the right/left cross),
+  - a cyan vertical tail at column 4 for rows 7–8,
+  - an orange horizontal tail at row 6 for columns 5–8.
+
+Output primitives:
+
+grid_size(output,9,9).
+vertical_line(output,start(0,4),end(5,4),color(cyan)).
+horizontal_line(output,start(1,2),end(1,8),color(cyan)).
+vertical_line(output,start(2,1),end(8,1),color(orange)).
+horizontal_line(output,start(6,0),end(6,3),color(orange)).
+point(output,(1,1),red).
+point(output,(6,4),red).
+point(output,(1,0),cyan).
+point(output,(0,1),orange).
+vertical_line(output,start(7,4),end(8,4),color(cyan)).
+horizontal_line(output,start(6,5),end(6,8),color(orange)).
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,9,9).
+vertical_line(output,start(0,4),end(5,4),color(cyan)).
+horizontal_line(output,start(1,2),end(1,8),color(cyan)).
+vertical_line(output,start(2,1),end(8,1),color(orange)).
+horizontal_line(output,start(6,0),end(6,3),color(orange)).
+point(output,(1,1),red).
+point(output,(6,4),red).
+point(output,(1,0),cyan).
+point(output,(0,1),orange).
+vertical_line(output,start(7,4),end(8,4),color(cyan)).
+horizontal_line(output,start(6,5),end(6,8),color(orange)).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,9,9).
+vertical_line(output,start(0,4),end(5,4),color(cyan)).
+horizontal_line(output,start(1,2),end(1,8),color(cyan)).
+vertical_line(output,start(2,1),end(8,1),color(orange)).
+horizontal_line(output,start(6,0),end(6,3),color(orange)).
+point(output,(1,1),red).
+point(output,(6,4),red).
+point(output,(1,0),cyan).
+point(output,(0,1),orange).
+vertical_line(output,start(7,4),end(8,4),color(cyan)).
+horizontal_line(output,start(6,5),end(6,8),color(orange)).
+STEP 7: Evaluation of Predicted Output Grid
+
+incorrect_cell((0,4),(predicted(black),correct(cyan))) incorrect_cell((1,2),(predicted(black),correct(cyan))) incorrect_cell((1,3),(predicted(black),correct(cyan))) incorrect_cell((1,4),(predicted(black),correct(cyan))) incorrect_cell((1,5),(predicted(black),correct(cyan))) incorrect_cell((1,6),(predicted(black),correct(cyan))) incorrect_cell((1,7),(predicted(black),correct(cyan))) incorrect_cell((1,8),(predicted(black),correct(cyan))) incorrect_cell((2,1),(predicted(black),correct(orange))) incorrect_cell((2,4),(predicted(black),correct(cyan))) incorrect_cell((3,1),(predicted(black),correct(orange))) incorrect_cell((3,4),(predicted(black),correct(cyan))) incorrect_cell((4,1),(predicted(black),correct(orange))) incorrect_cell((4,4),(predicted(black),correct(cyan))) incorrect_cell((5,1),(predicted(black),correct(orange))) incorrect_cell((5,4),(predicted(black),correct(cyan))) incorrect_cell((6,0),(predicted(black),correct(orange))) incorrect_cell((6,1),(predicted(black),correct(orange))) incorrect_cell((6,2),(predicted(black),correct(orange))) incorrect_cell((6,3),(predicted(black),correct(orange))) incorrect_cell((6,5),(predicted(black),correct(orange))) incorrect_cell((6,6),(predicted(black),correct(orange))) incorrect_cell((6,7),(predicted(black),correct(orange))) incorrect_cell((6,8),(predicted(black),correct(orange))) incorrect_cell((7,1),(predicted(black),correct(orange))) incorrect_cell((7,4),(predicted(black),correct(cyan))) incorrect_cell((8,1),(predicted(black),correct(orange))) incorrect_cell((8,4),(predicted(black),correct(cyan))) incorrect_grid

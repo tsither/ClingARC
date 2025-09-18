@@ -1,0 +1,70 @@
+STEP 1: Extracted Primitives
+
+instances/40
+Results for grid_2.lp:
+Input grid:
+ grid_size(input,10,10) square(input,top_left_corner(2,5),bottom_right_corner(3,6),size(2),color(red)) square(input,top_left_corner(5,3),bottom_right_corner(6,4),size(2),color(blue))
+
+Output grid:
+ grid_size(output,10,10) square(output,top_left_corner(2,5),bottom_right_corner(3,6),size(2),color(red)) square(output,top_left_corner(5,3),bottom_right_corner(6,4),size(2),color(blue))
+
+========================================
+
+Results for grid_1.lp:
+Input grid:
+ grid_size(input,10,10) square(input,top_left_corner(0,2),bottom_right_corner(1,3),size(2),color(red)) square(input,top_left_corner(7,6),bottom_right_corner(8,7),size(2),color(blue))
+
+Output grid:
+ grid_size(output,10,10) square(output,top_left_corner(0,2),bottom_right_corner(1,3),size(2),color(red)) square(output,top_left_corner(7,6),bottom_right_corner(8,7),size(2),color(blue))
+
+========================================
+
+Results for grid_0.lp:
+Input grid:
+ grid_size(input,10,10) square(input,top_left_corner(2,2),bottom_right_corner(3,3),size(2),color(blue)) square(input,top_left_corner(6,4),bottom_right_corner(7,5),size(2),color(red))
+
+Output grid:
+ grid_size(output,10,10) square(output,top_left_corner(2,2),bottom_right_corner(3,3),size(2),color(blue)) square(output,top_left_corner(6,4),bottom_right_corner(7,5),size(2),color(red))
+
+========================================
+
+STEP 2: Extracted Transformation Rules
+
+Observed rule:
+- Identity mapping: the output grid is identical to the input grid.
+- Grid size unchanged.
+- Every input square is copied to the output with the same top_left_corner, bottom_right_corner, size, and color.
+
+Thus for each input square primitive (top_left_corner(X1,Y1), bottom_right_corner(X2,Y2), size(S), color(C)) the output will contain the same square primitive with those exact parameters.
+STEP 3: Retrieved Test Input Primitives
+
+Input grid:
+ grid_size(input,10,10) square(input,top_left_corner(3,6),bottom_right_corner(4,7),size(2),color(blue)) square(input,top_left_corner(5,2),bottom_right_corner(6,3),size(2),color(red))
+
+Output grid:
+ 
+
+========================================
+
+STEP 4: Predicted Test Output
+
+Description:
+The output grid is identical to the input grid (identity mapping). The two squares from the input are copied unchanged (same positions, sizes, and colors). Grid size remains 10x10.
+
+Output primitives:
+grid_size(output,10,10)
+square(output,top_left_corner(3,6),bottom_right_corner(4,7),size(2),color(blue))
+square(output,top_left_corner(5,2),bottom_right_corner(6,3),size(2),color(red))
+STEP 5: Translated Test Output to ASP Code Primitives
+
+grid_size(output,10,10).
+square(output,top_left_corner(3,6),bottom_right_corner(4,7),size(2),color(blue)).
+square(output,top_left_corner(5,2),bottom_right_corner(6,3),size(2),color(red)).
+STEP 6: Verified/Corrected ASP Code Primitives
+
+grid_size(output,10,10).
+square(output,top_left_corner(3,6),bottom_right_corner(4,7),size(2),color(blue)).
+square(output,top_left_corner(5,2),bottom_right_corner(6,3),size(2),color(red)).
+STEP 7: Evaluation of Predicted Output Grid
+
+incorrect_cell((0,3),(predicted(black),correct(blue))) incorrect_cell((1,4),(predicted(black),correct(blue))) incorrect_cell((2,5),(predicted(black),correct(blue))) incorrect_cell((7,4),(predicted(black),correct(red))) incorrect_cell((8,5),(predicted(black),correct(red))) incorrect_cell((9,6),(predicted(black),correct(red))) incorrect_grid
