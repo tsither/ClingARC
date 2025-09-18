@@ -9,6 +9,9 @@ You can run ClingARC on a single ARC task via 'main.py'.
 python main.py --mode [wholesale,iterative] --instance [path to instance (e.g. instances/1]
 ```
 
+The modes determine which prompting method is used. Wholesale is the default, iterative prompting demands more tokens. Running an instance could run ~3,000 - ~10,000 tokens. 
+
+
 *Note, the framework has only been tested on a subset of the larger ARC dataset, behavior could be unpredictable or unreliable on instances where the grid size is variable from input to output. 
 
 
