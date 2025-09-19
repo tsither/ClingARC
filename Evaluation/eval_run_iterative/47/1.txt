@@ -238,8 +238,10 @@ square(output,top_left_corner(3,0),bottom_right_corner(4,1),size(2),color(magent
 square(output,top_left_corner(3,4),bottom_right_corner(4,5),size(2),color(magenta)).
 square(output,top_left_corner(3,8),bottom_right_corner(4,9),size(2),color(magenta)).
 square(output,top_left_corner(3,12),bottom_right_corner(4,13),size(2),color(magenta)).
+
 vertical_line(output,start(2,2),end(4,2),color(red),length(3)).
 vertical_line(output,start(2,6),end(4,6),color(red),length(3)).
+
 horizontal_line(output,start(3,1),end(3,2),color(red),length(2)).
 horizontal_line(output,start(3,5),end(3,6),color(red),length(2)).
 point(output,(3,9),red).

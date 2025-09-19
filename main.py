@@ -10,7 +10,6 @@ import argparse
 def main():
     parser = argparse.ArgumentParser(description="ClingARC Project CLI")
     parser.add_argument('--mode', choices=['wholesale','iterative'], default='wholesale', help='Prompting mode to run the project pipeline')
-    parser.add_argument('--print_prompts', action='store_true', help='Print prompts and exit')
     parser.add_argument('--instance', type=str, default="train_instances/1", help='Path to training instance directory')
     args = parser.parse_args()
 
