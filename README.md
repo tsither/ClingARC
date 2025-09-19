@@ -22,3 +22,7 @@ ClingARC requires ARC data to be translated into equivalent Answer Set Programmi
 ```bash
 python prepare_data.py --arc-data [directory storing ARC data] --output-dir [desired output directory name]
 ```
+
+### Evaluation
+
+Complete reasoning traces can be found in ClingARC/Evaluation for both prompting methods.
